@@ -6,7 +6,6 @@ int compare(const void *a, const void *b) {
 }
 
 int calculate_total_distance(int *left, int *right, int size) {
-    // Sort both lists
     qsort(left, size, sizeof(int), compare);
     qsort(right, size, sizeof(int), compare);
 
