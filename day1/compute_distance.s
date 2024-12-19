@@ -14,7 +14,7 @@ compute_distance:
 bubble_sort_outer:
     cmp x3, x2
     bge loop_init
-    mov x4, x3
+    mov x4, #1
 
 bubble_sort_inner:
     sub x5, x4, #1
