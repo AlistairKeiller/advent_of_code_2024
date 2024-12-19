@@ -13,7 +13,7 @@ compute_distance:
 
 bubble_sort_outer:
     cmp x3, x2
-    bge loop_init
+    bge bubble_sort_2_init
     mov x4, #1
 
 bubble_sort_inner:
@@ -32,6 +32,31 @@ bubble_sort_skip:
 
     add x3, x3, #1
     b bubble_sort_outer
+
+bubble_sort_2_init:
+    mov x3, #1
+
+bubble_sort_2_outer:
+    cmp x3, x2
+    bge loop_init
+    mov x4, #1
+
+bubble_sort_2_inner:
+    sub x5, x4, #1
+    ldr w6, [x1, x5, lsl #2]
+    ldr w7, [x1, x4, lsl #2]
+    cmp w6, w7
+    bge bubble_sort_2_skip
+    str w7, [x1, x5, lsl #2]
+    str w6, [x1, x4, lsl #2]
+
+bubble_sort_2_skip:
+    add x4, x4, #1
+    cmp x4, x2
+    blt bubble_sort_2_inner
+
+    add x3, x3, #1
+    b bubble_sort_2_outer
 
 loop_init:
     mov w3, #0 // total count
