@@ -18,12 +18,12 @@ bubble_sort_outer:
 
 bubble_sort_inner:
     sub x5, x4, #1
-    ldr w5, [x0, x5, lsl #2]
-    ldr w6, [x0, x4, lsl #2]
-    cmp w5, w6
+    ldr w6, [x0, x5, lsl #2]
+    ldr w7, [x0, x4, lsl #2]
+    cmp w6, w7
     bge bubble_sort_skip
-    str w6, [x0, x5, lsl #2]
-    str w5, [x0, x4, lsl #2]
+    str w7, [x0, x5, lsl #2]
+    str w6, [x0, x4, lsl #2]
 
 bubble_sort_skip:
     add x4, x4, #1
