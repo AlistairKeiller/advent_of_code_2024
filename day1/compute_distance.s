@@ -6,11 +6,37 @@ compute_distance:
     // x2: size of arrays (n)
 
     // Prologue
-    stp x29, x30, [sp, -16]!
+    stp x29, x30, [sp, #-16]!
     mov x29, sp
 
-    mov w3, 0 // total count
-    mov x4, 0 // loop index
+    mov x3, #1
+
+bubble_sort_outer:
+    cmp x3, x2
+    bge loop_init
+    mov x4, x3
+
+bubble_sort_inner:
+    sub x5, x4, #1
+    ldr w5, [x0, x5, lsl #2]
+    ldr w6, [x0, x4, lsl #2]
+    cmp w5, w6
+    bge bubble_sort_skip
+    str w6, [x0, x5, lsl #2]
+    str w5, [x0, x4, lsl #2]
+
+bubble_sort_skip:
+    add x4, x4, #1
+    cmp x4, x2
+    bl bubble_sort_inner
+
+    add x3, x3, #1
+    b bubble_sort_outer
+
+loop_init:
+    mov w3, #0 // total count
+    mov x4, #0 // loop index
+
 loop_start:
     cmp x4, x2
     bge loop_end
@@ -25,6 +51,7 @@ loop_start:
 
     add x4, x4, 1
     b loop_start
+
 loop_end:
     mov w0, w3
 
