@@ -1,5 +1,4 @@
 {
     "name": "Ubuntu",
-    "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-    "postCreateCommand": "sudo apt-get update && sudo apt-get install -y clang"
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu"
 }
