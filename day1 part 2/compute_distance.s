@@ -9,73 +9,33 @@ compute_distance:
     stp x29, x30, [sp, #-16]!
     mov x29, sp
 
-    mov x3, #1
-
-bubble_sort_outer:
-    cmp x3, x2
-    bge bubble_sort_2_init
-    mov x4, #1
-
-bubble_sort_inner:
-    sub x5, x4, #1
-    ldr w6, [x0, x5, lsl #2]
-    ldr w7, [x0, x4, lsl #2]
-    cmp w6, w7
-    bge bubble_sort_skip
-    str w7, [x0, x5, lsl #2]
-    str w6, [x0, x4, lsl #2]
-
-bubble_sort_skip:
-    add x4, x4, #1
-    cmp x4, x2
-    blt bubble_sort_inner
-
-    add x3, x3, #1
-    b bubble_sort_outer
-
-bubble_sort_2_init:
-    mov x3, #1
-
-bubble_sort_2_outer:
-    cmp x3, x2
-    bge loop_init
-    mov x4, #1
-
-bubble_sort_2_inner:
-    sub x5, x4, #1
-    ldr w6, [x1, x5, lsl #2]
-    ldr w7, [x1, x4, lsl #2]
-    cmp w6, w7
-    bge bubble_sort_2_skip
-    str w7, [x1, x5, lsl #2]
-    str w6, [x1, x4, lsl #2]
-
-bubble_sort_2_skip:
-    add x4, x4, #1
-    cmp x4, x2
-    blt bubble_sort_2_inner
-
-    add x3, x3, #1
-    b bubble_sort_2_outer
+    mov w3, #0 // similarity
+    mov x4, #0 // i
 
 loop_init:
-    mov w3, #0 // total count
-    mov x4, #0 // loop index
-
-loop_start:
     cmp x4, x2
     bge loop_end
 
     ldr w5, [x0, x4, lsl #2]
-    ldr w6, [x1, x4, lsl #2]
 
-    subs w7, w5, w6
-    cneg w7, w7, mi
+    mov x6, #0 // j
 
-    add w3, w3, w7
+loop_inner:
+    cmp x6, x2
+    bge loop_inner_end
+    ldr w7, [x1, x6, lsl #2]
 
-    add x4, x4, 1
-    b loop_start
+    cmp w5, w7
+    bne loop_inner_skip
+    add w3, w3, w5
+
+loop_inner_skip:
+    add x6, x6, #1
+    b loop_inner
+
+loop_inner_end:
+    add x4, x4, #1
+    b loop_init
 
 loop_end:
     mov w0, w3
