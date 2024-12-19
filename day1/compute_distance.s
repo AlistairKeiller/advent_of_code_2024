@@ -28,7 +28,7 @@ bubble_sort_inner:
 bubble_sort_skip:
     add x4, x4, #1
     cmp x4, x2
-    bl bubble_sort_inner
+    blt bubble_sort_inner
 
     add x3, x3, #1
     b bubble_sort_outer
