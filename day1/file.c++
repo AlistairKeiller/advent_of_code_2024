@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 
-extern int compute_distance(int x[], int y[], int n);
+extern "C" int compute_distance(int* a, int* b, int n);
 
 int main() {
     int x[1000], y[1000], n = 0;
