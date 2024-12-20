@@ -31,19 +31,19 @@ loop_iter:
     beq new_line
 
     // Check if increasing
-    cmp w9, w8
+    cmp w8, w9
     bgt increasing_skip
     mov x5, 0
 
 increasing_skip:
     // Check if decreasing
-    cmp w8, w9
-    blt decreasing_skip
+    cmp w9, w8
+    bgt decreasing_skip
     mov x6, 0
 
 decreasing_skip:
     // Check if max gap of 3
-    sub w10, w9, w8
+    subs w10, w9, w8
     cneg w10, w10, mi
     cmp w10, 3
     ble max_gap_skip
