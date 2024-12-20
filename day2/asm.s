@@ -18,21 +18,20 @@ loop_init:
 
 loop_iter:
     // check if we are at the end of the array
-    cmp x4, x1
+    add x10, x4, 1
+    cmp x10, x1
     bge loop_end
 
     // load the current and next report
     ldr w8, [x0, x4, lsl #2]
-    add x4, x4, 1
-    ldr w9, [x0, x4, lsl #2]
-    sub x4, x4, 1
+    ldr w9, [x0, x10, lsl #2]
 
     // check if we are at the end of the section
     cmp w9, -1
     beq new_line
 
     // Check if increasing
-    cmp w8, w9
+    cmp w9, w8
     bgt increasing_skip
     mov x5, 0
 
