@@ -1,81 +1,89 @@
 .global compute_safe
 compute_safe:
     // Arguments:
-    // x0: pointer to array reports
+    // x0: pointer to array levels
     // x1: size of arrays (num_reports)
 
     // Prologue
     stp x29, x30, [sp, #-16]!
     mov x29, sp
 
-    mov x3, 0 // safe_reports_counter
-    mov x4, 0 // array_index
+    mov x2, 1 // array_index
+    mov x3, 3 // increasing flag (3 == safe, 2 == skipping, 1 == skipped, 0 == unsafe)
+    mov x4, 3 // decreasing flag (3 == safe, 2 == skipping, 1 == skipped, 0 == unsafe)
 
-loop_init:
-    mov x5, 1 // increasing flag
-    mov x6, 1 // decreasing flag
-    mov x7, 1 // max gap of 3 flag
-
-loop_iter:
+increasing_loop:
     // check if we are at the end of the array
-    add x10, x4, 1
-    cmp x10, x1
-    bge loop_end
+    cmp x2, x1
+    bge decreasing_loop
 
-    // load the current and next report
-    ldr w8, [x0, x4, lsl #2]
-    ldr w9, [x0, x10, lsl #2]
+    // load the current and next level
+    sub x7, x2, 1
+    cmp x3, 2
+    bne increasing_skipping
+    sub x7, x7, 1
+    mov x3, 1
 
-    // check if we are at the end of the section
-    cmp w9, -1
-    beq new_line
+increasing_skipping:
+    ldr w5, [x0, x7, lsl #2]
+    ldr w6, [x0, x2, lsl #2]
 
-    // Check if increasing
-    cmp w8, w9
-    bgt increasing_skip
-    mov x5, 0
-
-increasing_skip:
-    // Check if decreasing
-    cmp w9, w8
-    bgt decreasing_skip
-    mov x6, 0
-
-decreasing_skip:
-    // Check if max gap of 3
-    subs w10, w9, w8
-    cneg w10, w10, mi
-    cmp w10, 3
-    ble max_gap_skip
+    // Check if 1 <= increasing <= 3
+    cmp w5, w6
+    bge not_increasing
     mov x7, 0
+    sub w8, w6, w5
+    cmp w8, 3
+    bgt not_increasing
+    b increasing
 
-max_gap_skip:
-    add x4, x4, 1
-    b loop_iter
+not_increasing:
+    sub x3, x3, 1
 
-new_line:
-    // Check if we can increase the safe counter
-    cmp x7, 0
-    beq iter_end
+increasing:
+    add x2, x2, 1
+    b increasing_loop
 
-    cmp x5, 1
-    beq increase_safe_counter
+decreasing_loop:
+    // check if we are at the end of the array
+    cmp x2, x1
+    bge end
 
-    cmp x6, 1
-    beq increase_safe_counter
+    // load the current and next level
+    sub x7, x2, 1
+    cmp x3, 2
+    bne decreasing_skipping
+    sub x7, x7, 1
+    mov x3, 1
 
-    b iter_end
+decreasing_skipping:
+    ldr w5, [x0, x7, lsl #2]
+    ldr w6, [x0, x2, lsl #2]
 
-increase_safe_counter:
-    add x3, x3, 1
+    // Check if 1 <= decreasing <= 3
+    cmp w5, w6
+    bge not_decreasing
+    mov x7, 0
+    sub w8, w6, w5
+    cmp w8, 3
+    bgt not_decreasing
+    b decreasing
 
-iter_end:
-    add x4, x4, 2
-    b loop_init
+not_decreasing:
+    sub x3, x3, 1
 
-loop_end:
-    mov x0, x3
+decreasing:
+    add x2, x2, 1
+    b decreasing_loop
 
+end:
+    mov x0, 1
+    cmp x3, 0
+    bne safe
+    cmp x4, 0
+    bne safe
+    mov x0, 0
+safe:
     // Epilogue
     ldp x29, x30, [sp], #16
     ret
