@@ -1,5 +1,13 @@
 {
     "name": "Ubuntu",
     "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-    "postCreateCommand": "sudo apt update && sudo apt install gdb -y"
+    "postCreateCommand": "sudo apt update && sudo apt install gdb -y",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.cpptools",
+                "Mikhail-Arkhipov.armassemblyeditor"
+            ]
+        }
+    }
 }
