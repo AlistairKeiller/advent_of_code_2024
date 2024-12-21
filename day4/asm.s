@@ -31,6 +31,72 @@ column_loop:
     // check the value is x
     cmp w7, 'X'
     bne column_loop_skip
+    
+    // right match (XMAS)
+    // check M
+    add x8, x4, 1
+    cmp x8, x2
+    bge right_match_skip
+    mul x6, x3, x1
+    add x6, x6, x8
+    ldrb w7, [x0, x6]
+    cmp w7, 'M'
+    bne right_match_skip
+    // check A
+    add x8, x8, 1
+    cmp x8, x2
+    bge right_match_skip
+    mul x6, x3, x1
+    add x6, x6, x8
+    ldrb w7, [x0, x6]
+    cmp w7, 'A'
+    bne right_match_skip
+    // check S
+    add x8, x8, 1
+    cmp x8, x2
+    bge right_match_skip
+    mul x6, x3, x1
+    add x6, x6, x8
+    ldrb w7, [x0, x6]
+    cmp w7, 'S'
+    bne right_match_skip
+    // increase result
+    add x5, x5, 1
+    b column_loop_skip
+
+right_match_skip:
+    // down match X
+    //            M
+    //            A
+    //            S
+    // check M
+    add x8, x3, 1
+    cmp x8, x1
+    bge down_match_skip
+    mul x6, x8, x1
+    add x6, x6, x4
+    ldrb w7, [x0, x6]
+    cmp w7, 'M'
+    bne down_match_skip
+    // check A
+    add x8, x3, 1
+    cmp x8, x1
+    bge down_match_skip
+    mul x6, x8, x1
+    add x6, x6, x4
+    ldrb w7, [x0, x6]
+    cmp w7, 'A'
+    bne down_match_skip
+    // check S
+    add x8, x3, 1
+    cmp x8, x1
+    bge down_match_skip
+    mul x6, x8, x1
+    add x6, x6, x4
+    ldrb w7, [x0, x6]
+    cmp w7, 'S'
+    bne down_match_skip
+    // increase result
     add x5, x5, 1
 
 column_loop_skip:
