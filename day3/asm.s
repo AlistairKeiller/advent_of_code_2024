@@ -12,7 +12,7 @@ count_mul:
 
 loop:
     // check for end of string
-    ldr w3, [x0, x1, lsl #2]
+    ldrb w3, [x0, x1]
     cmp w3, 0
     beq end
 
@@ -20,22 +20,22 @@ loop:
     cmp w3, 'm'
     bne skip
     add x1, x1, 1
-    ldr w3, [x0, x1, lsl #2]
+    ldrb w3, [x0, x1]
     cmp w3, 'u'
     bne loop
     add x1, x1, 1
-    ldr w3, [x0, x1, lsl #2]
+    ldrb w3, [x0, x1]
     cmp w3, 'l'
     bne loop
     add x1, x1, 1
-    ldr w3, [x0, x1, lsl #2]
+    ldrb w3, [x0, x1]
     cmp w3, '('
     bne loop
 
     // get first number first digit
     mov x4, 0
     add x1, x1, 1
-    ldr w3, [x0, x1, lsl #2]
+    ldrb w3, [x0, x1]
     cmp w3, '0'
     blt loop
     cmp w3, '9'
@@ -45,7 +45,7 @@ loop:
 
     // get first number second digit
     add x1, x1, 1
-    ldr w3, [x0, x1, lsl #2]
+    ldrb w3, [x0, x1]
     cmp w3, '0'
     blt first_number_done
     cmp w3, '9'
@@ -57,7 +57,7 @@ loop:
 
     // get first number third digit
     add x1, x1, 1
-    ldr w3, [x0, x1, lsl #2]
+    ldrb w3, [x0, x1]
     cmp w3, '0'
     blt first_number_done
     cmp w3, '9'
@@ -70,14 +70,14 @@ loop:
 first_number_done:
     // check for ,
     add x1, x1, 1
-    ldr w3, [x0, x1, lsl #2]
+    ldrb w3, [x0, x1]
     cmp w3, ','
     bne loop
 
     // get second number first digit
     mov x5, 0
     add x1, x1, 1
-    ldr w3, [x0, x1, lsl #2]
+    ldrb w3, [x0, x1]
     cmp w3, '0'
     blt loop
     cmp w3, '9'
@@ -87,7 +87,7 @@ first_number_done:
 
     // get second number second digit
     add x1, x1, 1
-    ldr w3, [x0, x1, lsl #2]
+    ldrb w3, [x0, x1]
     cmp w3, '0'
     blt second_number_done
     cmp w3, '9'
@@ -99,7 +99,7 @@ first_number_done:
 
     // get second number third digit
     add x1, x1, 1
-    ldr w3, [x0, x1, lsl #2]
+    ldrb w3, [x0, x1]
     cmp w3, '0'
     blt second_number_done
     cmp w3, '9'
@@ -112,7 +112,7 @@ first_number_done:
 second_number_done:
     // check for )
     add x1, x1, 1
-    ldr w3, [x0, x1, lsl #2]
+    ldrb w3, [x0, x1]
     cmp w3, ')'
     bne loop
 
