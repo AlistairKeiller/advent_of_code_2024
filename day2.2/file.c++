@@ -16,7 +16,6 @@ int main() {
             num_reports++;
         }
         safe += compute_safe(reports, num_reports);
-        std::cout << compute_safe(reports, num_reports) << std::endl;
     }
 
     std::cout << safe << std::endl;
