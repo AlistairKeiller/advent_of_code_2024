@@ -66,10 +66,10 @@ loop:
     mov x6, #10
     mul x4, x4, x6
     add x4, x4, w3, uxtw
+    add x1, x1, 1
 
 first_number_done:
     // check for ,
-    add x1, x1, 1
     ldrb w3, [x0, x1]
     cmp w3, ','
     bne loop
@@ -108,10 +108,10 @@ first_number_done:
     mov x6, #10
     mul x5, x5, x6
     add x5, x5, w3, uxtw
+    add x1, x1, 1
 
 second_number_done:
     // check for )
-    add x1, x1, 1
     ldrb w3, [x0, x1]
     cmp w3, ')'
     bne loop
