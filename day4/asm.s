@@ -314,11 +314,11 @@ up_left_match_skip:
     // X
     sub     x9, x3, 3
     cmp     x9, 0
-    blt     up_right_match_skip
+    blt     column_loop_skip
 
     add     x9, x4, 3
     cmp     x9, x2
-    bge     up_right_match_skip
+    bge     column_loop_skip
 
     // check M at (y-1, x+1)
     sub     x9, x3, 1
@@ -327,7 +327,7 @@ up_left_match_skip:
     add     x6, x6, x10
     ldrb    w7, [x0, x6]
     cmp     w7, 'M'
-    bne     up_right_match_skip
+    bne     column_loop_skip
 
     // check A at (y-2, x+2)
     sub     x9, x3, 2
@@ -336,7 +336,7 @@ up_left_match_skip:
     add     x6, x6, x10
     ldrb    w7, [x0, x6]
     cmp     w7, 'A'
-    bne     up_right_match_skip
+    bne     column_loop_skip
 
     // check S at (y-3, x+3)
     sub     x9, x3, 3
@@ -345,12 +345,10 @@ up_left_match_skip:
     add     x6, x6, x10
     ldrb    w7, [x0, x6]
     cmp     w7, 'S'
-    bne     up_right_match_skip
+    bne     column_loop_skip
 
     // found
     add     x5, x5, 1
-
-up_right_match_skip:
 
 column_loop_skip:
     add     x4, x4, 1
