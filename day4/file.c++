@@ -1,22 +1,26 @@
 #include <iostream>
 #include <fstream>
 
-extern "C" int count_xmas(char* input, int rows, int cols);
+extern "C" int count_xmas(char *input, int rows, int cols);
 
-int main() {
+int main()
+{
     std::fstream inputFile("input.txt");
-    if (!inputFile) {
+    if (!inputFile)
+    {
         std::cerr << "Unable to open file input.txt";
         return 1;
     }
 
     const int rows = 10;
     const int cols = 10;
-    char input[rows*cols];
+    char input[rows * cols];
 
-    for (int x = 0; x < cols; ++x) {
-        for (int y = 0; y < rows; ++y) {
-            inputFile >> input[x*cols + y];
+    for (int y = 0; y < rows; y++)
+    {
+        for (int x = 0; x < cols; x++)
+        {
+            inputFile >> input[y * rows + x];
         }
     }
 
