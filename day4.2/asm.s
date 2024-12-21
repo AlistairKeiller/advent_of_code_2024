@@ -32,6 +32,8 @@ column_loop: // for (int x = 0; x < columns; x++)
     cmp     w7, 'A'
     bne     column_loop_skip
 
+    mov     x10, 0 // counter for S
+
     // check that (x+1, y+1) is either an M or an S
     add     x8, x3, 1
     add     x9, x4, 1
@@ -39,12 +41,13 @@ column_loop: // for (int x = 0; x < columns; x++)
     add     x6, x6, x9
     ldrb    w7, [x0, x6]
     cmp     w7, 'M'
-    beq     either_M_or_S_1
+    beq     either_m_or_s_1
     cmp     w7, 'S'
-    beq     either_M_or_S_1
+    add     x10, x10, 1
+    beq     either_m_or_s_1
     b       column_loop_skip
 
-either_M_or_S_1:
+either_m_or_s_1:
     // check that (x-1, y+1) is either an M or an S
     add     x8, x3, 1
     sub     x9, x4, 1
@@ -52,12 +55,13 @@ either_M_or_S_1:
     add     x6, x6, x9
     ldrb    w7, [x0, x6]
     cmp     w7, 'M'
-    beq     either_M_or_S_2
+    beq     either_m_or_s_2
     cmp     w7, 'S'
-    beq     either_M_or_S_2
+    add     x10, x10, 1
+    beq     either_m_or_s_2
     b       column_loop_skip
-    
-either_M_or_S_2:
+
+either_m_or_s_2:
     // check that (x-1, y-1) is either an M or an S
     sub     x8, x3, 1
     sub     x9, x4, 1
@@ -65,12 +69,13 @@ either_M_or_S_2:
     add     x6, x6, x9
     ldrb    w7, [x0, x6]
     cmp     w7, 'M'
-    beq     either_M_or_S_3
+    beq     either_m_or_s_3
     cmp     w7, 'S'
-    beq     either_M_or_S_3
+    add     x10, x10, 1
+    beq     either_m_or_s_3
     b       column_loop_skip
 
-either_M_or_S_3:
+either_m_or_s_3:
     // check that (x+1, y-1) is either an M or an S
     sub     x8, x3, 1
     add     x9, x4, 1
@@ -78,12 +83,13 @@ either_M_or_S_3:
     add     x6, x6, x9
     ldrb    w7, [x0, x6]
     cmp     w7, 'M'
-    beq     either_M_or_S_4
+    beq     either_m_or_s_4
     cmp     w7, 'S'
-    beq     either_M_or_S_4
+    add     x10, x10, 1
+    beq     either_m_or_s_4
     b       column_loop_skip
 
-either_M_or_S_4:
+either_m_or_s_4:
     // check that (x-1, y-1) != (x+1, y+1)
     sub     x8, x3, 1
     sub     x9, x4, 1
@@ -96,7 +102,11 @@ either_M_or_S_4:
     add     x6, x6, x9
     ldrb    w8, [x0, x6]
     cmp     w7, w8
-    beq     column_loop_skip 
+    beq     column_loop_skip
+
+    // check that x10 == 2
+    cmp     x10, 2
+    bne     column_loop_skip
 
     // found
     add     x5, x5, 1
