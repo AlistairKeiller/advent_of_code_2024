@@ -1,14 +1,127 @@
 .global count_mul
 count_mul:
     // Arguments:
-    // x0: pointer to array levels
-    // x1: size of arrays (num_reports)
+    // x0: pointer to mul array
 
     // Prologue
     stp x29, x30, [sp, #-16]!
     mov x29, sp
 
-    
+    mov x1, 0 // index
+    mov x2, 0 // total
+
+loop:
+    // check for end of string
+    ldr w3, [x0, x1, lsl #2]
+    cmp w3, 0
+    beq end
+
+    // check for mul(
+    ldr w3, [x0, x1, lsl #2]
+    cmp w3, 'm'
+    bne skip
+    add x1, x1, 1
+    ldr w3, [x0, x1, lsl #2]
+    cmp w3, 'u'
+    bne loop
+    add x1, x1, 1
+    ldr w3, [x0, x1, lsl #2]
+    cmp w3, 'l'
+    bne loop
+    add x1, x1, 1
+    ldr w3, [x0, x1, lsl #2]
+    cmp w3, '('
+    bne loop
+
+    // get first number first digit
+    mov x4, 0
+    add x1, x1, 1
+    ldr w3, [x0, x1, lsl #2]
+    cmp w3, '0'
+    blt loop
+    cmp w3, '9'
+    bgt loop
+    sub w3, w3, '0'
+    add x4, x4, w3
+
+    // get first number second digit
+    add x1, x1, 1
+    ldr w3, [x0, x1, lsl #2]
+    cmp w3, '0'
+    blt first_number_done
+    cmp w3, '9'
+    bgt first_number_done
+    sub w3, w3, '0'
+    mul x4, x4, 10
+    add x4, x4, w3
+
+    // get first number third digit
+    add x1, x1, 1
+    ldr w3, [x0, x1, lsl #2]
+    cmp w3, '0'
+    blt first_number_done
+    cmp w3, '9'
+    bgt first_number_done
+    sub w3, w3, '0'
+    mul x4, x4, 10
+    add x4, x4, w3
+
+first_number_done:
+    // check for ,
+    add x1, x1, 1
+    ldr w3, [x0, x1, lsl #2]
+    cmp w3, ','
+    bne loop
+
+    // get second number first digit
+    mov x5, 0
+    add x1, x1, 1
+    ldr w3, [x0, x1, lsl #2]
+    cmp w3, '0'
+    blt loop
+    cmp w3, '9'
+    bgt loop
+    sub w3, w3, '0'
+    add x1, x1, 1
+    add x5, x5, w3
+
+    // get second number second digit
+    ldr w3, [x0, x1, lsl #2]
+    cmp w3, '0'
+    blt second_number_done
+    cmp w3, '9'
+    bgt second_number_done
+    sub w3, w3, '0'
+    mul x5, x5, 10
+    add x5, x5, w3
+
+    // get second number third digit
+    add x1, x1, 1
+    ldr w3, [x0, x1, lsl #2]
+    cmp w3, '0'
+    blt second_number_done
+    cmp w3, '9'
+    bgt second_number_done
+    sub w3, w3, '0'
+    mul x5, x5, 10
+    add x5, x5, w3
+
+second_number_done:
+    // check for )
+    add x1, x1, 1
+    ldr w3, [x0, x1, lsl #2]
+    cmp w3, ')'
+    bne loop
+
+    // add to total
+    mul x4, x4, x5
+    add x2, x2, x4
+
+skip:
+    add x1, x1, 1
+    b loop
+
+end:
     // Epilogue
     ldp x29, x30, [sp], #16
     ret
