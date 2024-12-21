@@ -17,7 +17,6 @@ loop:
     beq end
 
     // check for mul(
-    ldr w3, [x0, x1, lsl #2]
     cmp w3, 'm'
     bne skip
     add x1, x1, 1
