@@ -21,10 +21,10 @@ column_loop: // for (int x = 0; x < columns; x++)
     cmp     x4, x2
     bge     column_loop_end
 
-    // ----------------------------------------------------------
-    // check we have x
-    // ----------------------------------------------------------
-    mul     x6, x3, x1
+    //------------------------------------------------------------------
+    // check we have X
+    //------------------------------------------------------------------
+    mul     x6, x3, x2
     add     x6, x6, x4
     ldrb    w7, [x0, x6]
     cmp     w7, 'X'
@@ -39,7 +39,7 @@ column_loop: // for (int x = 0; x < columns; x++)
 
     // check M at (y, x+1)
     add     x8, x4, 1
-    mul     x6, x3, x1
+    mul     x6, x3, x2
     add     x6, x6, x8
     ldrb    w7, [x0, x6]
     cmp     w7, 'M'
@@ -47,7 +47,7 @@ column_loop: // for (int x = 0; x < columns; x++)
 
     // check A at (y, x+2)
     add     x8, x4, 2
-    mul     x6, x3, x1
+    mul     x6, x3, x2
     add     x6, x6, x8
     ldrb    w7, [x0, x6]
     cmp     w7, 'A'
@@ -55,7 +55,7 @@ column_loop: // for (int x = 0; x < columns; x++)
 
     // check S at (y, x+3)
     add     x8, x4, 3
-    mul     x6, x3, x1
+    mul     x6, x3, x2
     add     x6, x6, x8
     ldrb    w7, [x0, x6]
     cmp     w7, 'S'
@@ -79,7 +79,7 @@ right_match_skip:
 
     // check M at (y+1, x)
     add     x8, x3, 1
-    mul     x6, x8, x1
+    mul     x6, x8, x2
     add     x6, x6, x4
     ldrb    w7, [x0, x6]
     cmp     w7, 'M'
@@ -87,7 +87,7 @@ right_match_skip:
 
     // check A at (y+2, x)
     add     x8, x3, 2
-    mul     x6, x8, x1
+    mul     x6, x8, x2
     add     x6, x6, x4
     ldrb    w7, [x0, x6]
     cmp     w7, 'A'
@@ -95,7 +95,7 @@ right_match_skip:
 
     // check S at (y+3, x)
     add     x8, x3, 3
-    mul     x6, x8, x1
+    mul     x6, x8, x2
     add     x6, x6, x4
     ldrb    w7, [x0, x6]
     cmp     w7, 'S'
@@ -115,7 +115,7 @@ down_match_skip:
 
     // check M at (y, x-1)
     sub     x8, x4, 1
-    mul     x6, x3, x1
+    mul     x6, x3, x2
     add     x6, x6, x8
     ldrb    w7, [x0, x6]
     cmp     w7, 'M'
@@ -123,7 +123,7 @@ down_match_skip:
 
     // check A at (y, x-2)
     sub     x8, x4, 2
-    mul     x6, x3, x1
+    mul     x6, x3, x2
     add     x6, x6, x8
     ldrb    w7, [x0, x6]
     cmp     w7, 'A'
@@ -131,7 +131,7 @@ down_match_skip:
 
     // check S at (y, x-3)
     sub     x8, x4, 3
-    mul     x6, x3, x1
+    mul     x6, x3, x2
     add     x6, x6, x8
     ldrb    w7, [x0, x6]
     cmp     w7, 'S'
@@ -155,7 +155,7 @@ left_match_skip:
 
     // check M at (y-1, x)
     sub     x8, x3, 1
-    mul     x6, x8, x1
+    mul     x6, x8, x2
     add     x6, x6, x4
     ldrb    w7, [x0, x6]
     cmp     w7, 'M'
@@ -163,7 +163,7 @@ left_match_skip:
 
     // check A at (y-2, x)
     sub     x8, x3, 2
-    mul     x6, x8, x1
+    mul     x6, x8, x2
     add     x6, x6, x4
     ldrb    w7, [x0, x6]
     cmp     w7, 'A'
@@ -171,7 +171,7 @@ left_match_skip:
 
     // check S at (y-3, x)
     sub     x8, x3, 3
-    mul     x6, x8, x1
+    mul     x6, x8, x2
     add     x6, x6, x4
     ldrb    w7, [x0, x6]
     cmp     w7, 'S'
@@ -200,7 +200,7 @@ up_match_skip:
     // check M at (y+1, x+1)
     add     x9, x3, 1
     add     x10, x4, 1
-    mul     x6, x9, x1
+    mul     x6, x9, x2
     add     x6, x6, x10
     ldrb    w7, [x0, x6]
     cmp     w7, 'M'
@@ -209,7 +209,7 @@ up_match_skip:
     // check A at (y+2, x+2)
     add     x9, x3, 2
     add     x10, x4, 2
-    mul     x6, x9, x1
+    mul     x6, x9, x2
     add     x6, x6, x10
     ldrb    w7, [x0, x6]
     cmp     w7, 'A'
@@ -218,7 +218,7 @@ up_match_skip:
     // check S at (y+3, x+3)
     add     x9, x3, 3
     add     x10, x4, 3
-    mul     x6, x9, x1
+    mul     x6, x9, x2
     add     x6, x6, x10
     ldrb    w7, [x0, x6]
     cmp     w7, 'S'
@@ -247,7 +247,7 @@ down_right_match_skip:
     // check M at (y+1, x-1)
     add     x9, x3, 1
     sub     x10, x4, 1
-    mul     x6, x9, x1
+    mul     x6, x9, x2
     add     x6, x6, x10
     ldrb    w7, [x0, x6]
     cmp     w7, 'M'
@@ -256,7 +256,7 @@ down_right_match_skip:
     // check A at (y+2, x-2)
     add     x9, x3, 2
     sub     x10, x4, 2
-    mul     x6, x9, x1
+    mul     x6, x9, x2
     add     x6, x6, x10
     ldrb    w7, [x0, x6]
     cmp     w7, 'A'
@@ -265,7 +265,7 @@ down_right_match_skip:
     // check S at (y+3, x-3)
     add     x9, x3, 3
     sub     x10, x4, 3
-    mul     x6, x9, x1
+    mul     x6, x9, x2
     add     x6, x6, x10
     ldrb    w7, [x0, x6]
     cmp     w7, 'S'
@@ -294,7 +294,7 @@ down_left_match_skip:
     // check M at (y-1, x-1)
     sub     x9, x3, 1
     sub     x10, x4, 1
-    mul     x6, x9, x1
+    mul     x6, x9, x2
     add     x6, x6, x10
     ldrb    w7, [x0, x6]
     cmp     w7, 'M'
@@ -303,7 +303,7 @@ down_left_match_skip:
     // check A at (y-2, x-2)
     sub     x9, x3, 2
     sub     x10, x4, 2
-    mul     x6, x9, x1
+    mul     x6, x9, x2
     add     x6, x6, x10
     ldrb    w7, [x0, x6]
     cmp     w7, 'A'
@@ -312,7 +312,7 @@ down_left_match_skip:
     // check S at (y-3, x-3)
     sub     x9, x3, 3
     sub     x10, x4, 3
-    mul     x6, x9, x1
+    mul     x6, x9, x2
     add     x6, x6, x10
     ldrb    w7, [x0, x6]
     cmp     w7, 'S'
@@ -341,7 +341,7 @@ up_left_match_skip:
     // check M at (y-1, x+1)
     sub     x9, x3, 1
     add     x10, x4, 1
-    mul     x6, x9, x1
+    mul     x6, x9, x2
     add     x6, x6, x10
     ldrb    w7, [x0, x6]
     cmp     w7, 'M'
@@ -350,7 +350,7 @@ up_left_match_skip:
     // check A at (y-2, x+2)
     sub     x9, x3, 2
     add     x10, x4, 2
-    mul     x6, x9, x1
+    mul     x6, x9, x2
     add     x6, x6, x10
     ldrb    w7, [x0, x6]
     cmp     w7, 'A'
@@ -359,7 +359,7 @@ up_left_match_skip:
     // check S at (y-3, x+3)
     sub     x9, x3, 3
     add     x10, x4, 3
-    mul     x6, x9, x1
+    mul     x6, x9, x2
     add     x6, x6, x10
     ldrb    w7, [x0, x6]
     cmp     w7, 'S'
