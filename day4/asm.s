@@ -6,110 +6,381 @@ count_xmas:
     // x2: number of columns
 
     // Prologue
-    stp x29, x30, [sp, #-16]!
-    mov x29, sp
+    stp     x29, x30, [sp, #-16]!
+    mov     x29, sp
 
-    mov x3, 0 // y
-    mov x5, 0 // result
+    mov     x3, 0          // y
+    mov     x5, 0          // xmas count
 
-row_loop:
-    mov x4, 0 // x
-    // check if we are at the end of the array
-    cmp x3, x1
-    bge row_loop_end
+row_loop: // for (int y = 0; y < rows; y++)
+    mov     x4, 0          // x
+    cmp     x3, x1
+    bge     row_loop_end
 
-column_loop:
-    // check if we are at the end of the array
-    cmp x4, x2
-    bge column_loop_end
+column_loop: // for (int x = 0; x < columns; x++)
+    cmp     x4, x2
+    bge     column_loop_end
 
-    // load the current value (xcmas[y * rows + x])
-    mul x6, x3, x1
-    add x6, x6, x4
-    ldrb w7, [x0, x6]
+    // ----------------------------------------------------------
+    //  check we have x
+    // ----------------------------------------------------------
+    mul     x6, x3, x1
+    add     x6, x6, x4
+    ldrb    w7, [x0, x6]
+    cmp     w7, 'X'
+    bne     column_loop_skip
 
-    // check the value is x
-    cmp w7, 'X'
-    bne column_loop_skip
-    
-    // right match (XMAS)
-    // check M
-    add x8, x4, 1
-    cmp x8, x2
-    bge right_match_skip
-    mul x6, x3, x1
-    add x6, x6, x8
-    ldrb w7, [x0, x6]
-    cmp w7, 'M'
-    bne right_match_skip
-    // check A
-    add x8, x8, 1
-    cmp x8, x2
-    bge right_match_skip
-    mul x6, x3, x1
-    add x6, x6, x8
-    ldrb w7, [x0, x6]
-    cmp w7, 'A'
-    bne right_match_skip
-    // check S
-    add x8, x8, 1
-    cmp x8, x2
-    bge right_match_skip
-    mul x6, x3, x1
-    add x6, x6, x8
-    ldrb w7, [x0, x6]
-    cmp w7, 'S'
-    bne right_match_skip
-    // increase result
-    add x5, x5, 1
-    b column_loop_skip
+    //------------------------------------------------------------------
+    // right match: X M A S
+    //------------------------------------------------------------------
+    add     x8, x4, 3
+    cmp     x8, x2
+    bge     right_match_skip
+
+    // check M at (y, x+1)
+    add     x8, x4, 1
+    mul     x6, x3, x1
+    add     x6, x6, x8
+    ldrb    w7, [x0, x6]
+    cmp     w7, 'M'
+    bne     right_match_skip
+
+    // check A at (y, x+2)
+    add     x8, x4, 2
+    mul     x6, x3, x1
+    add     x6, x6, x8
+    ldrb    w7, [x0, x6]
+    cmp     w7, 'A'
+    bne     right_match_skip
+
+    // check S at (y, x+3)
+    add     x8, x4, 3
+    mul     x6, x3, x1
+    add     x6, x6, x8
+    ldrb    w7, [x0, x6]
+    cmp     w7, 'S'
+    bne     right_match_skip
+
+    // found "XMAS" going right
+    add     x5, x5, 1
 
 right_match_skip:
-    // down match X
-    //            M
-    //            A
-    //            S
-    // check M
-    add x8, x3, 1
-    cmp x8, x1
-    bge down_match_skip
-    mul x6, x8, x1
-    add x6, x6, x4
-    ldrb w7, [x0, x6]
-    cmp w7, 'M'
-    bne down_match_skip
-    // check A
-    add x8, x3, 1
-    cmp x8, x1
-    bge down_match_skip
-    mul x6, x8, x1
-    add x6, x6, x4
-    ldrb w7, [x0, x6]
-    cmp w7, 'A'
-    bne down_match_skip
-    // check S
-    add x8, x3, 1
-    cmp x8, x1
-    bge down_match_skip
-    mul x6, x8, x1
-    add x6, x6, x4
-    ldrb w7, [x0, x6]
-    cmp w7, 'S'
-    bne down_match_skip
-    // increase result
-    add x5, x5, 1
+
+    //------------------------------------------------------------------
+    // DOWN match:
+    //    X
+    //    M
+    //    A
+    //    S
+    //------------------------------------------------------------------
+    add     x8, x3, 3
+    cmp     x8, x1
+    bge     down_match_skip
+
+    // check M at (y+1, x)
+    add     x8, x3, 1
+    mul     x6, x8, x1
+    add     x6, x6, x4
+    ldrb    w7, [x0, x6]
+    cmp     w7, 'M'
+    bne     down_match_skip
+
+    // check A at (y+2, x)
+    add     x8, x3, 2
+    mul     x6, x8, x1
+    add     x6, x6, x4
+    ldrb    w7, [x0, x6]
+    cmp     w7, 'A'
+    bne     down_match_skip
+
+    // check S at (y+3, x)
+    add     x8, x3, 3
+    mul     x6, x8, x1
+    add     x6, x6, x4
+    ldrb    w7, [x0, x6]
+    cmp     w7, 'S'
+    bne     down_match_skip
+
+    // found
+    add     x5, x5, 1
+
+down_match_skip:
+
+    //------------------------------------------------------------------
+    // LEFT match:  S A M X
+    //------------------------------------------------------------------
+    sub     x8, x4, 3
+    cmp     x8, 0
+    blt     left_match_skip
+
+    // check M at (y, x-1)
+    sub     x8, x4, 1
+    mul     x6, x3, x1
+    add     x6, x6, x8
+    ldrb    w7, [x0, x6]
+    cmp     w7, 'M'
+    bne     left_match_skip
+
+    // check A at (y, x-2)
+    sub     x8, x4, 2
+    mul     x6, x3, x1
+    add     x6, x6, x8
+    ldrb    w7, [x0, x6]
+    cmp     w7, 'A'
+    bne     left_match_skip
+
+    // check S at (y, x-3)
+    sub     x8, x4, 3
+    mul     x6, x3, x1
+    add     x6, x6, x8
+    ldrb    w7, [x0, x6]
+    cmp     w7, 'S'
+    bne     left_match_skip
+
+    // found
+    add     x5, x5, 1
+
+left_match_skip:
+
+    //------------------------------------------------------------------
+    // 4) UP match:
+    //    S
+    //    A
+    //    M
+    //    X
+    //------------------------------------------------------------------
+    sub     x8, x3, 3
+    cmp     x8, 0
+    blt     up_match_skip
+
+    // check M at (y-1, x)
+    sub     x8, x3, 1
+    mul     x6, x8, x1
+    add     x6, x6, x4
+    ldrb    w7, [x0, x6]
+    cmp     w7, 'M'
+    bne     up_match_skip
+
+    // check A at (y-2, x)
+    sub     x8, x3, 2
+    mul     x6, x8, x1
+    add     x6, x6, x4
+    ldrb    w7, [x0, x6]
+    cmp     w7, 'A'
+    bne     up_match_skip
+
+    // check S at (y-3, x)
+    sub     x8, x3, 3
+    mul     x6, x8, x1
+    add     x6, x6, x4
+    ldrb    w7, [x0, x6]
+    cmp     w7, 'S'
+    bne     up_match_skip
+
+    // found
+    add     x5, x5, 1
+
+up_match_skip:
+
+    //------------------------------------------------------------------
+    // 5) DOWN-RIGHT match (diagonal):
+    //       X
+    //         M
+    //           A
+    //             S
+    //------------------------------------------------------------------
+    add     x9, x3, 3
+    cmp     x9, x1
+    bge     down_right_match_skip
+
+    add     x9, x4, 3
+    cmp     x9, x2
+    bge     down_right_match_skip
+
+    // check M at (y+1, x+1)
+    add     x9, x3, 1
+    add     x10, x4, 1
+    mul     x6, x9, x1
+    add     x6, x6, x10
+    ldrb    w7, [x0, x6]
+    cmp     w7, 'M'
+    bne     down_right_match_skip
+
+    // check A at (y+2, x+2)
+    add     x9, x3, 2
+    add     x10, x4, 2
+    mul     x6, x9, x1
+    add     x6, x6, x10
+    ldrb    w7, [x0, x6]
+    cmp     w7, 'A'
+    bne     down_right_match_skip
+
+    // check S at (y+3, x+3)
+    add     x9, x3, 3
+    add     x10, x4, 3
+    mul     x6, x9, x1
+    add     x6, x6, x10
+    ldrb    w7, [x0, x6]
+    cmp     w7, 'S'
+    bne     down_right_match_skip
+
+    // found
+    add     x5, x5, 1
+
+down_right_match_skip:
+
+    //------------------------------------------------------------------
+    // 6) DOWN-LEFT match (diagonal):
+    //           X
+    //         M
+    //       A
+    //     S
+    //------------------------------------------------------------------
+    add     x9, x3, 3
+    cmp     x9, x1
+    bge     down_left_match_skip
+
+    sub     x9, x4, 3
+    cmp     x9, 0
+    blt     down_left_match_skip
+
+    // check M at (y+1, x-1)
+    add     x9, x3, 1
+    sub     x10, x4, 1
+    mul     x6, x9, x1
+    add     x6, x6, x10
+    ldrb    w7, [x0, x6]
+    cmp     w7, 'M'
+    bne     down_left_match_skip
+
+    // check A at (y+2, x-2)
+    add     x9, x3, 2
+    sub     x10, x4, 2
+    mul     x6, x9, x1
+    add     x6, x6, x10
+    ldrb    w7, [x0, x6]
+    cmp     w7, 'A'
+    bne     down_left_match_skip
+
+    // check S at (y+3, x-3)
+    add     x9, x3, 3
+    sub     x10, x4, 3
+    mul     x6, x9, x1
+    add     x6, x6, x10
+    ldrb    w7, [x0, x6]
+    cmp     w7, 'S'
+    bne     down_left_match_skip
+
+    // found
+    add     x5, x5, 1
+
+down_left_match_skip:
+
+    //------------------------------------------------------------------
+    // 7) UP-LEFT match (diagonal):
+    //     S
+    //       A
+    //         M
+    //           X
+    //------------------------------------------------------------------
+    sub     x9, x3, 3
+    cmp     x9, 0
+    blt     up_left_match_skip
+
+    sub     x9, x4, 3
+    cmp     x9, 0
+    blt     up_left_match_skip
+
+    // check M at (y-1, x-1)
+    sub     x9, x3, 1
+    sub     x10, x4, 1
+    mul     x6, x9, x1
+    add     x6, x6, x10
+    ldrb    w7, [x0, x6]
+    cmp     w7, 'M'
+    bne     up_left_match_skip
+
+    // check A at (y-2, x-2)
+    sub     x9, x3, 2
+    sub     x10, x4, 2
+    mul     x6, x9, x1
+    add     x6, x6, x10
+    ldrb    w7, [x0, x6]
+    cmp     w7, 'A'
+    bne     up_left_match_skip
+
+    // check S at (y-3, x-3)
+    sub     x9, x3, 3
+    sub     x10, x4, 3
+    mul     x6, x9, x1
+    add     x6, x6, x10
+    ldrb    w7, [x0, x6]
+    cmp     w7, 'S'
+    bne     up_left_match_skip
+
+    // found
+    add     x5, x5, 1
+
+up_left_match_skip:
+
+    //------------------------------------------------------------------
+    // 8) UP-RIGHT match (diagonal):
+    //       S
+    //     A
+    //   M
+    // X
+    //------------------------------------------------------------------
+    sub     x9, x3, 3
+    cmp     x9, 0
+    blt     up_right_match_skip
+
+    add     x9, x4, 3
+    cmp     x9, x2
+    bge     up_right_match_skip
+
+    // check M at (y-1, x+1)
+    sub     x9, x3, 1
+    add     x10, x4, 1
+    mul     x6, x9, x1
+    add     x6, x6, x10
+    ldrb    w7, [x0, x6]
+    cmp     w7, 'M'
+    bne     up_right_match_skip
+
+    // check A at (y-2, x+2)
+    sub     x9, x3, 2
+    add     x10, x4, 2
+    mul     x6, x9, x1
+    add     x6, x6, x10
+    ldrb    w7, [x0, x6]
+    cmp     w7, 'A'
+    bne     up_right_match_skip
+
+    // check S at (y-3, x+3)
+    sub     x9, x3, 3
+    add     x10, x4, 3
+    mul     x6, x9, x1
+    add     x6, x6, x10
+    ldrb    w7, [x0, x6]
+    cmp     w7, 'S'
+    bne     up_right_match_skip
+
+    // found
+    add     x5, x5, 1
+
+up_right_match_skip:
 
 column_loop_skip:
-    add x4, x4, 1
-    b column_loop
+    add     x4, x4, 1
+    b       column_loop
 
 column_loop_end:
-    add x3, x3, 1
-    b row_loop
+    add     x3, x3, 1
+    b       row_loop
 
 row_loop_end:
-    mov x0, x5
+    mov     x0, x5
 
     // Epilogue
-    ldp x29, x30, [sp], #16
+    ldp     x29, x30, [sp], #16
     ret

@@ -20,7 +20,7 @@ int main()
     {
         for (int x = 0; x < cols; x++)
         {
-            inputFile >> input[y * rows + x];
+            inputFile >> input[y * cols + x];
         }
     }
 
