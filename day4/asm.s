@@ -22,7 +22,7 @@ column_loop: // for (int x = 0; x < columns; x++)
     bge     column_loop_end
 
     // ----------------------------------------------------------
-    //  check we have x
+    // check we have x
     // ----------------------------------------------------------
     mul     x6, x3, x1
     add     x6, x6, x4
@@ -67,7 +67,7 @@ column_loop: // for (int x = 0; x < columns; x++)
 right_match_skip:
 
     //------------------------------------------------------------------
-    // DOWN match:
+    // down match:
     //    X
     //    M
     //    A
@@ -107,7 +107,7 @@ right_match_skip:
 down_match_skip:
 
     //------------------------------------------------------------------
-    // LEFT match:  S A M X
+    // left match:  S A M X
     //------------------------------------------------------------------
     sub     x8, x4, 3
     cmp     x8, 0
@@ -143,7 +143,7 @@ down_match_skip:
 left_match_skip:
 
     //------------------------------------------------------------------
-    // 4) UP match:
+    // up match:
     //    S
     //    A
     //    M
@@ -183,7 +183,7 @@ left_match_skip:
 up_match_skip:
 
     //------------------------------------------------------------------
-    // 5) DOWN-RIGHT match (diagonal):
+    // down-right match:
     //       X
     //         M
     //           A
@@ -230,7 +230,7 @@ up_match_skip:
 down_right_match_skip:
 
     //------------------------------------------------------------------
-    // 6) DOWN-LEFT match (diagonal):
+    // down-left match:
     //           X
     //         M
     //       A
@@ -277,7 +277,7 @@ down_right_match_skip:
 down_left_match_skip:
 
     //------------------------------------------------------------------
-    // 7) UP-LEFT match (diagonal):
+    // up-left match:
     //     S
     //       A
     //         M
@@ -324,7 +324,7 @@ down_left_match_skip:
 up_left_match_skip:
 
     //------------------------------------------------------------------
-    // 8) UP-RIGHT match (diagonal):
+    // up-right match:
     //       S
     //     A
     //   M
