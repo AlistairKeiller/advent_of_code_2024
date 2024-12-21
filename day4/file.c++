@@ -14,8 +14,8 @@ int main() {
     const int cols = 10;
     char input[rows*cols];
 
-    for (int x = 0; x < rows; ++x) {
-        for (int y = 0; y < cols; ++y) {
+    for (int x = 0; x < cols; ++x) {
+        for (int y = 0; y < rows; ++y) {
             inputFile >> input[x*cols + y];
         }
     }
