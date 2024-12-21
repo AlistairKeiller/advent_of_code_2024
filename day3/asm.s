@@ -42,7 +42,7 @@ loop:
     cmp w3, '9'
     bgt loop
     sub w3, w3, '0'
-    add x4, x4, w3
+    add x4, x4, w3, uxtw
 
     // get first number second digit
     add x1, x1, 1
@@ -52,8 +52,9 @@ loop:
     cmp w3, '9'
     bgt first_number_done
     sub w3, w3, '0'
-    mul x4, x4, 10
-    add x4, x4, w3
+    mov x6, #10
+    mul x4, x4, x6
+    add x4, x4, w3, uxtw
 
     // get first number third digit
     add x1, x1, 1
@@ -63,8 +64,9 @@ loop:
     cmp w3, '9'
     bgt first_number_done
     sub w3, w3, '0'
-    mul x4, x4, 10
-    add x4, x4, w3
+    mov x6, #10
+    mul x4, x4, x6
+    add x4, x4, w3, uxtw
 
 first_number_done:
     // check for ,
@@ -82,18 +84,19 @@ first_number_done:
     cmp w3, '9'
     bgt loop
     sub w3, w3, '0'
-    add x1, x1, 1
-    add x5, x5, w3
+    add x5, x5, w3, uxtw
 
     // get second number second digit
+    add x1, x1, 1
     ldr w3, [x0, x1, lsl #2]
     cmp w3, '0'
     blt second_number_done
     cmp w3, '9'
     bgt second_number_done
     sub w3, w3, '0'
-    mul x5, x5, 10
-    add x5, x5, w3
+    mov x6, #10
+    mul x5, x5, x6
+    add x5, x5, w3, uxtw
 
     // get second number third digit
     add x1, x1, 1
@@ -103,8 +106,9 @@ first_number_done:
     cmp w3, '9'
     bgt second_number_done
     sub w3, w3, '0'
-    mul x5, x5, 10
-    add x5, x5, w3
+    mov x6, #10
+    mul x5, x5, x6
+    add x5, x5, w3, uxtw
 
 second_number_done:
     // check for )
@@ -122,6 +126,8 @@ skip:
     b loop
 
 end:
+    mov x0, x2
+
     // Epilogue
     ldp x29, x30, [sp], #16
     ret

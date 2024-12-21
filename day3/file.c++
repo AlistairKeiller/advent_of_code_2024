@@ -2,7 +2,7 @@
 #include <fstream>
 #include <sstream>
 
-extern "C" int count_mul(char* input);
+extern "C" int count_mul(const char* input);
 
 int main() {
     std::ifstream inputFile("input.txt");
@@ -16,7 +16,7 @@ int main() {
     std::string content = buffer.str();
 
     const char* charArray = content.c_str();
-    std::cout << charArray << std::endl;
+    std::cout << count_mul(charArray) << std::endl;
 
     inputFile.close();
 }
