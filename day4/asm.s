@@ -9,11 +9,11 @@ count_xmas:
     stp     x29, x30, [sp, #-16]!
     mov     x29, sp
 
-    mov     x3, 0          // y
-    mov     x5, 0          // xmas count
+    mov     x3, 0 // y
+    mov     x5, 0 // xmas count
 
 row_loop: // for (int y = 0; y < rows; y++)
-    mov     x4, 0          // x
+    mov     x4, 0 // x
     cmp     x3, x1
     bge     row_loop_end
 
@@ -21,18 +21,14 @@ column_loop: // for (int x = 0; x < columns; x++)
     cmp     x4, x2
     bge     column_loop_end
 
-    //------------------------------------------------------------------
     // check we have X
-    //------------------------------------------------------------------
     mul     x6, x3, x2
     add     x6, x6, x4
     ldrb    w7, [x0, x6]
     cmp     w7, 'X'
     bne     column_loop_skip
 
-    //------------------------------------------------------------------
     // right match: X M A S
-    //------------------------------------------------------------------
     add     x8, x4, 3
     cmp     x8, x2
     bge     right_match_skip
@@ -61,18 +57,16 @@ column_loop: // for (int x = 0; x < columns; x++)
     cmp     w7, 'S'
     bne     right_match_skip
 
-    // found "XMAS" going right
+    // found
     add     x5, x5, 1
 
 right_match_skip:
 
-    //------------------------------------------------------------------
     // down match:
-    //    X
-    //    M
-    //    A
-    //    S
-    //------------------------------------------------------------------
+    // X
+    // M
+    // A
+    // S
     add     x8, x3, 3
     cmp     x8, x1
     bge     down_match_skip
@@ -106,9 +100,7 @@ right_match_skip:
 
 down_match_skip:
 
-    //------------------------------------------------------------------
-    // left match:  S A M X
-    //------------------------------------------------------------------
+    // left match: S A M X
     sub     x8, x4, 3
     cmp     x8, 0
     blt     left_match_skip
@@ -142,13 +134,11 @@ down_match_skip:
 
 left_match_skip:
 
-    //------------------------------------------------------------------
     // up match:
-    //    S
-    //    A
-    //    M
-    //    X
-    //------------------------------------------------------------------
+    // S
+    // A
+    // M
+    // X
     sub     x8, x3, 3
     cmp     x8, 0
     blt     up_match_skip
@@ -182,13 +172,11 @@ left_match_skip:
 
 up_match_skip:
 
-    //------------------------------------------------------------------
     // down-right match:
-    //       X
-    //         M
-    //           A
-    //             S
-    //------------------------------------------------------------------
+    // X
+    //   M
+    //     A
+    //       S
     add     x9, x3, 3
     cmp     x9, x1
     bge     down_right_match_skip
@@ -229,13 +217,11 @@ up_match_skip:
 
 down_right_match_skip:
 
-    //------------------------------------------------------------------
     // down-left match:
-    //           X
-    //         M
-    //       A
-    //     S
-    //------------------------------------------------------------------
+    //       X
+    //     M
+    //   A
+    // S
     add     x9, x3, 3
     cmp     x9, x1
     bge     down_left_match_skip
@@ -276,13 +262,11 @@ down_right_match_skip:
 
 down_left_match_skip:
 
-    //------------------------------------------------------------------
     // up-left match:
-    //     S
-    //       A
-    //         M
-    //           X
-    //------------------------------------------------------------------
+    // S
+    //   A
+    //     M
+    //       X
     sub     x9, x3, 3
     cmp     x9, 0
     blt     up_left_match_skip
@@ -323,13 +307,11 @@ down_left_match_skip:
 
 up_left_match_skip:
 
-    //------------------------------------------------------------------
     // up-right match:
     //       S
     //     A
     //   M
     // X
-    //------------------------------------------------------------------
     sub     x9, x3, 3
     cmp     x9, 0
     blt     up_right_match_skip

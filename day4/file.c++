@@ -12,8 +12,8 @@ int main()
         return 1;
     }
 
-    const int rows = 10;
-    const int cols = 10;
+    const int rows = 140;
+    const int cols = 140;
     char input[rows * cols];
 
     for (int y = 0; y < rows; y++)
