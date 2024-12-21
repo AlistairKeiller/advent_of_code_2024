@@ -61,7 +61,6 @@ column_loop: // for (int x = 0; x < columns; x++)
     add     x5, x5, 1
 
 right_match_skip:
-
     // down match:
     // X
     // M
@@ -99,7 +98,6 @@ right_match_skip:
     add     x5, x5, 1
 
 down_match_skip:
-
     // left match: S A M X
     sub     x8, x4, 3
     cmp     x8, 0
@@ -133,7 +131,6 @@ down_match_skip:
     add     x5, x5, 1
 
 left_match_skip:
-
     // up match:
     // S
     // A
@@ -171,7 +168,6 @@ left_match_skip:
     add     x5, x5, 1
 
 up_match_skip:
-
     // down-right match:
     // X
     //   M
@@ -216,7 +212,6 @@ up_match_skip:
     add     x5, x5, 1
 
 down_right_match_skip:
-
     // down-left match:
     //       X
     //     M
@@ -261,7 +256,6 @@ down_right_match_skip:
     add     x5, x5, 1
 
 down_left_match_skip:
-
     // up-left match:
     // S
     //   A
@@ -306,7 +300,6 @@ down_left_match_skip:
     add     x5, x5, 1
 
 up_left_match_skip:
-
     // up-right match:
     //       S
     //     A
